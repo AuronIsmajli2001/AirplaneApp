@@ -1,11 +1,81 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<module type="JAVA_MODULE" version="4">
-  <component name="NewModuleRootManager" inherit-compiler-output="true">
-    <exclude-output />
-    <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
-    </content>
-    <orderEntry type="inheritedJdk" />
-    <orderEntry type="sourceFolder" forTests="false" />
-  </component>
-</module>
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
+public class AirlineReservationSystem {
+    public static int[] seats = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+    public static boolean[] seatsStatus = {true, true, false, true, true, true, true, true, true, true, true, true};
+
+    public static boolean checkSeatsStatus(int seat) {
+        return seatsStatus[seat - 1];
+    }
+
+    public static void assignSeat(int seat) {
+        seatsStatus[seat - 1] = false;
+    }
+
+    public static void showSeats() {
+        System.out.println("seats : ");
+        for (int i = 0; i < seats.length; i++) {
+            if (seatsStatus[i]) {
+                System.out.print(seats[i] + " | ");
+            } else {
+                System.out.print("X | ");
+            }
+        }
+        System.out.println();
+        System.out.println("-------------------------------------------------");
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Welcome to Auron's Airplane Company!");
+        showSeats();
+        System.out.println("Seats with the numbers are free to be reserved.");
+        System.out.println("Seats with X are reserved.");
+        System.out.println();
+        System.out.println("Are u interested to reserve a seat? -");
+        String X = sc.next();
+        while (X.toUpperCase().equals("YES")) {
+            System.out.print("Which seat do you want to reserve? - ");
+//            int seat = sc.nextInt();
+            boolean validIntegerEntered = false;
+            System.out.println("ENTER A NUMBER: ");
+            int n;
+            if (!validIntegerEntered) {
+                try {
+                    n = sc.nextInt();
+                    validIntegerEntered = true;  // will not get here if nextInt()
+                    if (n <= 12 & n >=1) {
+                        boolean status = checkSeatsStatus(n);
+                        if (status) {
+                            assignSeat(n);
+                            System.out.println("Your seat number: " + n + " has been reserved");
+                            showSeats();
+                            System.out.println("Do you want to reserve another seat?(Yes/No) - ");
+                            String Y = sc.next();
+                            if (Y.toUpperCase().equals("YES")) {
+                            } else {
+                                break;
+                            }
+                        } else {
+                            System.out.println("Seat is reserved!");
+                            showSeats();
+                        }
+                    }
+
+                    else {
+                        sc.nextLine();            // let the scanner skip over the bad input
+                        System.out.println("ERROR-We don't have a seat like that!!! \nENTER A NUMBER  :");
+                    }
+                    // throws an exception
+                } catch (InputMismatchException e) {
+                    sc.nextLine();// let the scanner skip over the bad input
+                    System.out.println("ERROR-We don't have a seat like that!!! \nENTER A NUMBER :");
+                    // don't call nextInt() here; loop back, and nextInt() will be called
+                    // in the try statement
+                }
+            }
+
+        }
+    }
+}
